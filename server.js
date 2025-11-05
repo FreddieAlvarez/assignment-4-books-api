@@ -73,7 +73,7 @@ app.get('/api/books/:id', (req, res) => {
 });
 
 // POST /books - Create a new book
-app.post('/books', (req, res) => {
+app.post('/api/books', (req, res) => {
     // Extract data from request body
     const { title, author, genre, copiesAvailable } = req.body;
   
@@ -94,7 +94,7 @@ app.post('/books', (req, res) => {
 });
 
 // PUT /books/:id - Update an existing book
-app.put('/books/:id', (req, res) => {
+app.put('/api/books/:id', (req, res) => {
     const bookId = parseInt(req.params.id);
     const { title, author, genre, copiesAvailable } = req.body;
   
@@ -119,7 +119,7 @@ app.put('/books/:id', (req, res) => {
 });
 
 // DELETE /api/books/:id - Delete a book
-app.delete('/books/:id', (req, res) => {
+app.delete('/api/books/:id', (req, res) => {
     const bookId = parseInt(req.params.id);
   
     // Find the book index
@@ -136,11 +136,15 @@ app.delete('/books/:id', (req, res) => {
     res.json({ message: 'Book deleted successfully', book: deletedBook });
 });
 
-// Start the server
-app.listen(port, () => {
-    console.log(`Book API server running at http://localhost:${port}`);
-});
+//start server when running directly, not when testing
+if (require.main === module) {
+    app.listen(port, () => {
+        console.log(`Book API server running at http://localhost:${port}`);
+    });
+}
 
+// Export the app for testing
+module.exports = app;
 
 
 
