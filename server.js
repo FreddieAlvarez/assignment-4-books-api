@@ -1,3 +1,10 @@
+const express = require('express');
+const app = express();
+const port = 3000;
+
+// Middleware to parse JSON requests
+app.use(express.json());
+
 // Books for bookstore API
 let books = [
     {
@@ -32,7 +39,40 @@ let books = [
     'DELETE /api/books/:id': 'Delete a book'
 */
 
+// Root endpoint - API homepage
+app.get('/', (req, res) => {
+    res.json({ 
+        message: "Welcome to the Books API", 
+        endpoints: { 
+            "GET /api/books": "Get all books", 
+            "GET /api/books/:id": "Get a specific book by ID" 
+        } 
+    }); 
+});
 
+// GET /books - Return all books
+app.get('/api/books', (req, res) => {
+      // Sends back the books as JSON as the response to the request
+      res.json(books);
+});
+
+// GET /book/:id - Return a specific book by ID
+app.get('/api/books/:id', (req, res) => {
+    const bookId = parseInt(req.params.id);
+    const book = books.find(m => m.id === bookId);
+  
+	// Retunr Book if it is found
+    if (book) {
+        res.json(book);
+    } else {
+        res.status(404).json({ error: 'Book not found' });
+    }
+});
+
+// Start the server
+app.listen(port, () => {
+    console.log(`Book API server running at http://localhost:${port}`);
+});
 
 
 
